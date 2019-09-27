@@ -1,0 +1,1 @@
+cmd /k C:\Users\MERFISH2\Anaconda3\envs\hal2\python C:\Users\MERFISH2\code\hal2\storm-control\storm_control\fluidics\kilroy.py C:\Users\MERFISH2\code\hal2\storm-control\storm_control\fluidics\scope_settings\kilroy_settings_jfocal.xml

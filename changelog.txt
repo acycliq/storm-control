@@ -1,0 +1,44 @@
+
+2017-07-26: Changed everything in the process of updating for Python3 and
+            PyQt5. The entire configuration of a single setup is now
+	    specified in a single XML file. See storm_control/hal4000/xml
+	    for examples.
+
+2016-02-23: Implement a (basic) parameters editor. This will make it easier
+	    for users to change (most) of the parameters.
+
+2016-01-19: Change HAL / Steve to use an absolute pixel size for each 
+	    objective rather than a magnification relative to a 100x
+	    objective.
+	    
+2016-01-06: Change the structure of the parameters in preparation for including
+	    a parametor editor in HAL. The dot notation will now no longer work.
+	    Simplify the parameters that are saved with a movie. These don't
+	    need any type information, etc. as they are compared against the
+	    default parameters. Move all the less commonly used parameters
+	    into the appropriate module.
+
+2015-12-09: Add pixel size metadata to .tif images in a form that ImageJ can
+	    understand.
+
+2015-10-09: Fix a recently introduced bug in the Andor EMCCD control software
+            that caused it to drop frames and generate an error message in
+	    the updateImageWithFrame member of the QCameraWidget class. If
+	    you pulled a version in the last month and you use an Andor
+	    EMCCD camera an update is recommended.
+
+2015-09-24: Switched to doing all the image manipulation (for image display)
+	    in C, falling back to numpy of the C library is not available.
+	    
+2015-09-21: Implemented camera feeds and cleaned up some of the camera related
+	    stuff. At least in theory you can now do things like have multiple
+	    displays of the frames from a single camera. You can also display
+	    and/or capture average images and images at certain intervals, along
+	    with a slice from a larger image. As part of this effort, camera
+	    acquisition has been separated from camera display. Hopefully this
+	    also makes the camera code a little easier to understand.
+
+	    NOTE! This involves some changes to the layout of the hardware.xml file.
+
+2015-09-09: Implemented control of an Andor sCMOS camera using their SDK3 library.
+

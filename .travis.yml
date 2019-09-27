@@ -1,0 +1,67 @@
+
+# Use containers.
+sudo: false
+
+dist: xenial
+
+language: python
+
+python:
+  - 3.6
+  
+addons:
+  apt:
+    sources:
+      - sourceline: "deb http://us.archive.ubuntu.com/ubuntu/ xenial main universe"
+    packages:
+      - qt5-default
+      - libfftw3-dev
+      - liblapack-dev
+      - scons
+      - xvfb
+
+script:
+  - pwd
+  - git --version
+  - python3 --version
+  - pip install --upgrade pip
+  
+  # Install dependencies.
+  - pip3 install pyqt5
+  - pip3 install h5py
+  - pip3 install numpy
+  - pip3 install scipy
+  - pip3 install pillow
+  - pip3 install pyqtgraph
+  - pip3 install matplotlib
+  - pip3 install tifffile
+  - pip3 install pyserial
+  - pip3 install pytest
+  - pip3 install pytest-forked
+  - pip3 install pytest-mock
+  - pip3 install pytest-qt
+  - pip3 install pytest-xdist
+
+  # Install storm-analysis
+  - cd ..
+  - git clone https://github.com/ZhuangLab/storm-analysis
+  - cd storm-analysis
+  - scons
+  - cd ..
+  - ls
+
+  # Stackoverflow - https://stackoverflow.com/questions/3402168/permanently-add-a-directory-to-pythonpath
+  - export PYTHONPATH="${PYTHONPATH}:`pwd`/storm-analysis/"
+  - export PYTHONPATH="${PYTHONPATH}:`pwd`/storm-control/"
+  - python -c "import sys; print(sys.path)"
+  
+  # Build C libraries.
+  - ls
+  - cd storm-control
+  - scons
+
+  # Test
+  - cd storm_control/test
+  - xvfb-run py.test --forked
+#  - xvfb-run --server-args="-screen 0 1920x1080x24" py.test test_buffered_1.py
+#  - xvfb-run --server-args="-screen 0 1920x1080x24" py.test test_hello_world.py

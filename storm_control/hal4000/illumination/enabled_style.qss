@@ -1,0 +1,17 @@
+
+QLabel {
+    color : black;
+}
+
+//QRadioButton {
+//    color : white;
+//}
+
+//QSlider {
+//    background-color : white;
+//}
+
+//QSlider::handle {
+//    width : 30px;
+//    margin : 10px 0;
+//}
