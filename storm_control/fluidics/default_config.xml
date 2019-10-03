@@ -39,7 +39,7 @@
     <kilroy_protocols>
         <protocol name = "Extra Wash">
             <valve duration = "0">Flow Wash</valve>
-            <pump duration = "200">Normal Flow</pump>
+            <pump duration = "5">Normal Flow</pump>
             <pump duration = "0">Stop Flow</pump>
         </protocol>
         <protocol name = "Hybridize 1">
