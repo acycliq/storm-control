@@ -200,12 +200,28 @@ class StandAlone(QtWidgets.QMainWindow):
         exit_action.setShortcut("Ctrl+Q")
         exit_action.triggered.connect(self.close)
 
+        # Define keystrokes
+        run_pid_0 = QtWidgets.QAction("Run protocol 1", self)
+        run_pid_0.setShortcut("1")
+        run_pid_0.triggered.connect(lambda: self.kilroy.kilroyProtocols.startProtocolLocally(0))
+
+        run_pid_1 = QtWidgets.QAction("Run protocol 2", self)
+        run_pid_1.setShortcut("2")
+        run_pid_1.triggered.connect(lambda: self.kilroy.kilroyProtocols.startProtocolLocally(1))
+
+        run_pid_2 = QtWidgets.QAction("Run protocol 3", self)
+        run_pid_2.setShortcut("3")
+        run_pid_2.triggered.connect(lambda: self.kilroy.kilroyProtocols.startProtocolLocally(2))
+
         # Add menu items
         menubar = self.menuBar()
         file_menu = menubar.addMenu("&File")
         for menu_item in self.kilroy.kilroyProtocols.menu_items[0]:
             file_menu.addAction(menu_item)
         file_menu.addAction(exit_action)
+        file_menu.addAction(run_pid_0)
+        file_menu.addAction(run_pid_1)
+        file_menu.addAction(run_pid_2)
 
         valve_menu = menubar.addMenu("&Valves")
         for menu_item in self.kilroy.valveChain.menu_items[0]:
@@ -262,4 +278,5 @@ if __name__ == "__main__":
 
     # Run main app
     window.show()
+    window.kilroy.kilroyProtocols.startProtocolLocally(pid=0)
     sys.exit(app.exec_())
