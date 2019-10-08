@@ -19,6 +19,7 @@ import xml.etree.ElementTree as elementTree
 from PyQt5 import QtCore, QtGui, QtWidgets
 from storm_control.fluidics.valves.valveCommands import ValveCommands
 from storm_control.fluidics.pumps.pumpCommands import PumpCommands
+import storm_control.fluidics.nidaq as nidaq
 
 # ----------------------------------------------------------------------------------------
 # KilroyProtocols Class Definition
@@ -115,6 +116,11 @@ class KilroyProtocols(QtWidgets.QMainWindow):
         self.mainWidget = QtWidgets.QGroupBox()
         self.mainWidget.setTitle("Protocols")
         self.mainWidgetLayout = QtWidgets.QVBoxLayout(self.mainWidget)
+        radiobutton = QtWidgets.QCheckBox("NI-DAQ reading")
+        radiobutton.setChecked(False)
+        radiobutton.animal = "Cat"
+        radiobutton.toggled.connect(lambda: self.btnstate(radiobutton))
+        self.mainWidgetLayout.addWidget(radiobutton)
 
         self.fileLabel = QtWidgets.QLabel()
         self.fileLabel.setText("")
@@ -528,6 +534,32 @@ class KilroyProtocols(QtWidgets.QMainWindow):
             wid = QtWidgets.QListWidgetItem(text_string)
             wid.setFlags(wid.flags() & QtCore.Qt.ItemIsSelectable)
             self.protocolDetailsList.insertItem(ID, wid)
+
+    # ------------------------------------------------------------------------------------
+    # Listening to NI-DAQ card
+    # ------------------------------------------------------------------------------------
+    # def onTTL(self):
+    #     self.ttl = nidaq.TTL_Pulse()
+    #     self.ttl.start()
+    #
+    #     print('Checked')
+
+
+    def btnstate(self, b):
+        if b.isChecked() == True:
+            print('Button is selected')
+            self.ttl_thread = nidaq.TTL_Pulse()
+            print(self.ttl_thread)
+            self.ttl_thread.start()
+            print('Done when checked')
+            # print('self.ttl.task is ' + self.ttl.task)
+        else:
+            self.ttl_thread.stop_task()
+            # self.ttl_thread.task.clearTask()
+            # self.ttl_thread.task = None
+            # self.ttl_thread.terminate()
+            self.ttl_thread = None
+            print('button is deselected')
 
 # ----------------------------------------------------------------------------------------
 # Stand Alone Test Class
