@@ -436,6 +436,16 @@ def setDigitalLine(source, value):
     task.output(value)
     task.stopTask()
 
+def readDigitalLine(source):
+    print('reading digital')
+    task = DigitalInput(source=source)
+    out = task.input()
+    # PyDAQmx.DAQmxClearTask(task.taskHandle)
+    task.stopTask()
+    task.clearTask()
+    task = None
+    return out
+
 
 if (__name__ == "__main__"):
 
