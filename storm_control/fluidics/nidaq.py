@@ -1,4 +1,5 @@
 from PyQt5.QtCore import QThread, pyqtSignal
+import PyQt5.QtGui as QtGui
 import storm_control.sc_hardware.nationalInstruments.nicontrol as nidaq
 from time import sleep
 
@@ -39,13 +40,14 @@ class TTL_Pulse(QThread):
 
 
 class TTL_Thread(QThread):
-    update_me = pyqtSignal()
+    update_me = pyqtSignal(int)
 
     def __init__(self, event=None):
         QThread.__init__(self)
         self.stopped = event
         self.alive = True
         self.current_port_reading = None
+        self.emit_counter = 0
 
     def run(self):
         while self.alive:
@@ -57,8 +59,9 @@ class TTL_Thread(QThread):
                 print('now is false')
                 # If the previous reading is True and now is False run a Kilroy protocol
                 if self.current_port_reading:
-                    print('chat to Kilroy')
+                    print('chatting to Kilroy')
                     sleep(3)
-                    self.update_me.emit()
+                    self.update_me.emit(self.emit_counter)
                     self.current_port_reading = False
+                    self.emit_counter = self.emit_counter + 1
 

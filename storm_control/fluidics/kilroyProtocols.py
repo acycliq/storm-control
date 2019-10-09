@@ -380,7 +380,13 @@ class KilroyProtocols(QtWidgets.QMainWindow):
     # ------------------------------------------------------------------------------------
     # Initialize and start a protocol and issue first command
     # ------------------------------------------------------------------------------------
-    def startProtocol(self):
+    def startProtocol(self, protocol_ID = None):
+
+        # if you pass-in the protocol ID then set the current row
+        if protocol_ID is not None:
+            print('protocol_ID is None')
+            self.protocolListWidget.setCurrentRow(protocol_ID)
+
         protocol_ID = self.protocolListWidget.currentRow()
         
         # Get first command in protocol
@@ -430,10 +436,12 @@ class KilroyProtocols(QtWidgets.QMainWindow):
     # ------------------------------------------------------------------------------------
     # Handle the local start button
     # ------------------------------------------------------------------------------------
-    def startProtocolLocally(self):
+    def startProtocolLocally(self, pid):
         # Run protocol
         self.received_message = None # Remove existing messages
-        self.startProtocol()
+        print('')
+        print('starting protocol: ', str(pid))
+        self.startProtocol(protocol_ID=pid)
 
     # ------------------------------------------------------------------------------------
     # Initialize and start a protocol specified by a TCP message
@@ -549,10 +557,11 @@ class KilroyProtocols(QtWidgets.QMainWindow):
             self.ttl_thread.alive = False
             print('button is deselected')
 
-    def TTL_respond(self):
+    def TTL_respond(self, pid):
         print('Kilroy: in TTL_respond')
         print('Kilroy again: in TTL_respond')
-        self.startProtocolLocally()
+        print('x is ' + str(pid))
+        self.startProtocolLocally(pid=pid)
         return 1
 
 # ----------------------------------------------------------------------------------------
