@@ -373,11 +373,11 @@ class KilroyProtocols(QtWidgets.QMainWindow):
     # ------------------------------------------------------------------------------------
     # Initialize and start a protocol and issue first command
     # ------------------------------------------------------------------------------------
-    def startProtocol(self, protocol_ID = None):
+    def startProtocol(self, protocol_ID = False):
 
         # is you pass-in the protocol ID then set the current row
-        if protocol_ID is not None:
-            print('protocol_ID is None')
+        if protocol_ID is not False:
+            print('protocol_ID is False')
             self.protocolListWidget.setCurrentRow(protocol_ID)
 
         protocol_ID = self.protocolListWidget.currentRow()
