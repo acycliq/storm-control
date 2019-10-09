@@ -278,5 +278,5 @@ if __name__ == "__main__":
 
     # Run main app
     window.show()
-    window.kilroy.kilroyProtocols.startProtocolLocally(pid=0)
+    # window.kilroy.kilroyProtocols.startProtocolLocally(pid=0)
     sys.exit(app.exec_())
