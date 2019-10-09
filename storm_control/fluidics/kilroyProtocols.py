@@ -20,6 +20,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 from storm_control.fluidics.valves.valveCommands import ValveCommands
 from storm_control.fluidics.pumps.pumpCommands import PumpCommands
 import storm_control.fluidics.nidaq as nidaq
+from time import sleep
 
 # ----------------------------------------------------------------------------------------
 # KilroyProtocols Class Definition
@@ -538,28 +539,21 @@ class KilroyProtocols(QtWidgets.QMainWindow):
     # ------------------------------------------------------------------------------------
     # Listening to NI-DAQ card
     # ------------------------------------------------------------------------------------
-    # def onTTL(self):
-    #     self.ttl = nidaq.TTL_Pulse()
-    #     self.ttl.start()
-    #
-    #     print('Checked')
-
-
     def btnstate(self, b):
         if b.isChecked() == True:
-            print('Button is selected')
-            self.ttl_thread = nidaq.TTL_Pulse()
-            print(self.ttl_thread)
+            self.ttl_thread = nidaq.TTL_Thread()
             self.ttl_thread.start()
-            print('Done when checked')
-            # print('self.ttl.task is ' + self.ttl.task)
+            # self.test.finished.connect(thread_finished)
+            self.ttl_thread.update_me.connect(self.TTL_respond)
         else:
-            # self.ttl_thread.stop_task()
-            # self.ttl_thread.task.clearTask()
-            # self.ttl_thread.task = None
             self.ttl_thread.alive = False
-            # self.ttl_thread = None
             print('button is deselected')
+
+    def TTL_respond(self):
+        print('Kilroy: in TTL_respond')
+        print('Kilroy again: in TTL_respond')
+        self.startProtocolLocally()
+        return 1
 
 # ----------------------------------------------------------------------------------------
 # Stand Alone Test Class
