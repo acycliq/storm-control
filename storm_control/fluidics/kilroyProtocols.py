@@ -554,11 +554,11 @@ class KilroyProtocols(QtWidgets.QMainWindow):
             print('Done when checked')
             # print('self.ttl.task is ' + self.ttl.task)
         else:
-            self.ttl_thread.stop_task()
+            # self.ttl_thread.stop_task()
             # self.ttl_thread.task.clearTask()
             # self.ttl_thread.task = None
-            # self.ttl_thread.terminate()
-            self.ttl_thread = None
+            self.ttl_thread.alive = False
+            # self.ttl_thread = None
             print('button is deselected')
 
 # ----------------------------------------------------------------------------------------
