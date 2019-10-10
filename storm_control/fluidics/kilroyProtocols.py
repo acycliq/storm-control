@@ -20,7 +20,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 from storm_control.fluidics.valves.valveCommands import ValveCommands
 from storm_control.fluidics.pumps.pumpCommands import PumpCommands
 import storm_control.fluidics.nidaq as nidaq
-from time import sleep
+import datetime
 
 # ----------------------------------------------------------------------------------------
 # KilroyProtocols Class Definition
@@ -117,11 +117,11 @@ class KilroyProtocols(QtWidgets.QMainWindow):
         self.mainWidget = QtWidgets.QGroupBox()
         self.mainWidget.setTitle("Protocols")
         self.mainWidgetLayout = QtWidgets.QVBoxLayout(self.mainWidget)
-        radiobutton = QtWidgets.QCheckBox("NI-DAQ reading")
-        radiobutton.setChecked(False)
-        radiobutton.animal = "Cat"
-        radiobutton.toggled.connect(lambda: self.btnstate(radiobutton))
-        self.mainWidgetLayout.addWidget(radiobutton)
+        self.nidaq_checkbox = QtWidgets.QCheckBox("connect to NI-DAQ 6008")
+        self.nidaq_checkbox.setChecked(False)
+        self.nidaq_checkbox.model = "USB-6008"
+        self.nidaq_checkbox.toggled.connect(lambda: self.btnstate(self.nidaq_checkbox))
+        self.mainWidgetLayout.addWidget(self.nidaq_checkbox)
 
         self.fileLabel = QtWidgets.QLabel()
         self.fileLabel.setText("")
@@ -549,13 +549,13 @@ class KilroyProtocols(QtWidgets.QMainWindow):
     # ------------------------------------------------------------------------------------
     def btnstate(self, b):
         if b.isChecked() == True:
-            self.ttl_thread = nidaq.TTL_Thread()
+            self.ttl_thread = nidaq.TTL_Thread(self)
             self.ttl_thread.start()
-            # self.test.finished.connect(thread_finished)
+            # Connect the "update_me" signal to the TTL_respond slot
             self.ttl_thread.update_me.connect(self.TTL_respond)
         else:
             self.ttl_thread.alive = False
-            print('button is deselected')
+            print('%s: button is deselected' % (datetime.datetime.now()))
 
     def TTL_respond(self, pid):
         print('Kilroy: in TTL_respond')
