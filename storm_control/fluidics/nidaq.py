@@ -49,28 +49,29 @@ class TTL_Thread(QThread):
         # self.stopped = event
         self.gui = obj
         self.alive = True
-        self.port_reading = None
+        self.port_reading = False
         self.emit_counter = 0
         self.source = 'Dev1/port0/line0'
 
     def run(self):
         while self.alive:
             if nidaq.readDigitalLine(source = self.source):
-                self.port_reading = True
-                self.gui.nidaq_checkbox.setText('NI-DAQ 6008 connection established to %s' % self.source)
-                print('%s: reading input at %s, value is True' % (datetime.datetime.now(), self.source))
-            else:
                 # self.alive = False
-                print('reading input at %s, value is False' % self.source)
+                print('reading input at %s, value is True' % self.source)
                 self.gui.nidaq_checkbox.setText('NI-DAQ 6008 connection established to %s' % self.source)
-                # If the previous reading is True and now is False run a Kilroy protocol
-                if self.port_reading:
+                # If the previous reading is False and now is True then run a Kilroy protocol
+                if not self.port_reading:
                     print('chatting to Kilroy')
                     sleep(3)
                     # emit an "update_me" signal passing-in the appropriate int parameter, emit_counter
                     self.update_me.emit(self.emit_counter)
-                    self.port_reading = False
+                    self.port_reading = True
                     self.emit_counter = self.emit_counter + 1
+            else:
+                self.port_reading = False
+                self.gui.nidaq_checkbox.setText('NI-DAQ 6008 connection established to %s' % self.source)
+                print('%s: reading input at %s, value is False' % (datetime.datetime.now(), self.source))
+
         else:
             print('%s: NI-DAQ 6008 connection paused' % (datetime.datetime.now()))
             self.gui.nidaq_checkbox.setText('NI-DAQ 6008 connection paused')
