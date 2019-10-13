@@ -20,6 +20,8 @@ from storm_control.fluidics.pumps.pumpControl import PumpControl
 from storm_control.fluidics.kilroyProtocols import KilroyProtocols
 from storm_control.sc_library.tcpServer import TCPServer
 import storm_control.sc_library.parameters as params
+import storm_control.sc_hardware.nationalInstruments.nicontrol as nicontrol
+from time import sleep
 
 # ----------------------------------------------------------------------------------------
 # Kilroy Class Definition
@@ -80,6 +82,7 @@ class Kilroy(QtWidgets.QMainWindow):
         self.kilroyProtocols.command_ready_signal.connect(self.sendCommand)
         self.kilroyProtocols.status_change_signal.connect(self.handleProtocolStatusChange)
         self.kilroyProtocols.completed_protocol_signal.connect(self.handleProtocolComplete)
+        self.kilroyProtocols.do_TTL_pulse_signal.connect(self.TTL_out)
 
         # Create Kilroy TCP Server and connect signals
         self.tcpServer = TCPServer(port = self.tcp_port,
@@ -124,6 +127,28 @@ class Kilroy(QtWidgets.QMainWindow):
         else:
             self.valveChain.setEnabled(True)
             self.pumpControl.setEnabled(True)
+
+
+    def TTL_out(self):
+        if self.kilroyProtocols.nidaq_checkbox.isChecked():
+            # send now a TTL pulse out
+            print('Sending a TTL pulse')
+            print('in 5 sec')
+            sleep(1)
+            print('in 4 sec')
+            sleep(1)
+            print('in 3 sec')
+            sleep(1)
+            print('in 2 sec')
+            sleep(1)
+            print('in 1 sec')
+            sleep(1)
+            nicontrol.setDigitalLine('Dev1/port0/line1', True)
+            print('Done, sending a TTL out')
+            sleep(1)
+            nicontrol.setDigitalLine('Dev1/port0/line1', False)
+        else:
+            pass
 
     # ----------------------------------------------------------------------------------------
     # Handle a protocol complete signal from the valve protocols

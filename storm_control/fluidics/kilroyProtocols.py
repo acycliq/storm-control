@@ -21,6 +21,9 @@ from storm_control.fluidics.valves.valveCommands import ValveCommands
 from storm_control.fluidics.pumps.pumpCommands import PumpCommands
 import storm_control.fluidics.nidaq as nidaq
 import datetime
+from time import sleep
+import storm_control.sc_hardware.nationalInstruments.nicontrol as nicontrol
+
 
 # ----------------------------------------------------------------------------------------
 # KilroyProtocols Class Definition
@@ -31,6 +34,7 @@ class KilroyProtocols(QtWidgets.QMainWindow):
     command_ready_signal = QtCore.pyqtSignal() # A command is ready to be issued
     status_change_signal = QtCore.pyqtSignal() # A protocol status change occured
     completed_protocol_signal = QtCore.pyqtSignal(object) # Name of completed protocol
+    do_TTL_pulse_signal = QtCore.pyqtSignal()
         
     def __init__(self,
                  protocol_xml_path = "default_config.xml",
@@ -470,6 +474,7 @@ class KilroyProtocols(QtWidgets.QMainWindow):
         if self.status[0] >= 0:
             if self.verbose: print("Stopped Protocol")
             self.completed_protocol_signal.emit(self.received_message)
+            self.do_TTL_pulse_signal.emit()
         
         # Reset status and emit status change signal
         self.status = [-1,-1]
@@ -559,8 +564,8 @@ class KilroyProtocols(QtWidgets.QMainWindow):
 
     def TTL_respond(self, pid):
         print('Kilroy: in TTL_respond')
-        print('Kilroy again: in TTL_respond')
         print('x is ' + str(pid))
+        pid = pid % len(self.protocol_names)
         self.startProtocolLocally(pid=pid)
         return 1
 
