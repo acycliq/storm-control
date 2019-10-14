@@ -55,6 +55,7 @@ class TTL_Thread(QThread):
 
     def run(self):
         while self.alive:
+            # ok, that works but it is a bit too naive. The proper way is to do a callback on rising edge maybe?
             if nidaq.readDigitalLine(source = self.source):
                 # self.alive = False
                 # print('reading input at %s, value is True' % self.source)
