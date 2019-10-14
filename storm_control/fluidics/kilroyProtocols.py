@@ -21,8 +21,6 @@ from storm_control.fluidics.valves.valveCommands import ValveCommands
 from storm_control.fluidics.pumps.pumpCommands import PumpCommands
 import storm_control.fluidics.nidaq as nidaq
 import datetime
-from time import sleep
-import storm_control.sc_hardware.nationalInstruments.nicontrol as nicontrol
 
 
 # ----------------------------------------------------------------------------------------
@@ -34,7 +32,8 @@ class KilroyProtocols(QtWidgets.QMainWindow):
     command_ready_signal = QtCore.pyqtSignal() # A command is ready to be issued
     status_change_signal = QtCore.pyqtSignal() # A protocol status change occured
     completed_protocol_signal = QtCore.pyqtSignal(object) # Name of completed protocol
-    onGenerateTTL = QtCore.pyqtSignal()
+    onGenerateTTL = QtCore.pyqtSignal(str)  # signal which is called whenever we want to send out a TTL pulse. It
+                                            # passes on to its callback one arg of type str: the output port
         
     def __init__(self,
                  protocol_xml_path = "default_config.xml",
@@ -124,6 +123,8 @@ class KilroyProtocols(QtWidgets.QMainWindow):
         self.nidaq_checkbox = QtWidgets.QCheckBox("connect to NI-DAQ 6008")
         self.nidaq_checkbox.setChecked(False)
         self.nidaq_checkbox.model = "USB-6008"
+        self.nidaq_checkbox.line_in = 'Dev1/port0/line0'
+        self.nidaq_checkbox.line_out = 'Dev1/port0/line1'
         self.nidaq_checkbox.toggled.connect(lambda: self.btnstate(self.nidaq_checkbox))
         self.mainWidgetLayout.addWidget(self.nidaq_checkbox)
 
@@ -474,7 +475,7 @@ class KilroyProtocols(QtWidgets.QMainWindow):
         if self.status[0] >= 0:
             if self.verbose: print("Stopped Protocol")
             self.completed_protocol_signal.emit(self.received_message)
-            self.onGenerateTTL.emit()
+            self.onGenerateTTL.emit(self.nidaq_checkbox.line_out)
         
         # Reset status and emit status change signal
         self.status = [-1,-1]

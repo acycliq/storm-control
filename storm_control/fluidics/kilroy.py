@@ -82,7 +82,9 @@ class Kilroy(QtWidgets.QMainWindow):
         self.kilroyProtocols.command_ready_signal.connect(self.sendCommand)
         self.kilroyProtocols.status_change_signal.connect(self.handleProtocolStatusChange)
         self.kilroyProtocols.completed_protocol_signal.connect(self.handleProtocolComplete)
-        self.kilroyProtocols.onGenerateTTL.connect(self.generateTTL)
+        self.kilroyProtocols.onGenerateTTL.connect(self.generateTTL) # Connect the onGenerateTTL signal to it callback
+                                                                     # (aka slot in qt jargon). The callback takes one
+                                                                     # argument of type str: the output port
 
         # Create Kilroy TCP Server and connect signals
         self.tcpServer = TCPServer(port = self.tcp_port,
@@ -129,8 +131,9 @@ class Kilroy(QtWidgets.QMainWindow):
             self.pumpControl.setEnabled(True)
 
 
-    def generateTTL(self):
+    def generateTTL(self, line_out):
         if self.kilroyProtocols.nidaq_checkbox.isChecked():
+            print('line out is:', line_out)
             # send now a TTL pulse out
             print('Sending a TTL pulse')
             print('in 5 sec')
@@ -143,10 +146,10 @@ class Kilroy(QtWidgets.QMainWindow):
             sleep(1)
             print('in 1 sec')
             sleep(1)
-            nicontrol.setDigitalLine('Dev1/port0/line1', True)
+            nicontrol.setDigitalLine(line_out, True)
             print('Done, sending a TTL out')
             sleep(1)
-            nicontrol.setDigitalLine('Dev1/port0/line1', False)
+            nicontrol.setDigitalLine(line_out, False)
         else:
             pass
 

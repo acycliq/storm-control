@@ -51,14 +51,14 @@ class TTL_Thread(QThread):
         self.alive = True
         self.port_reading = False
         self.emit_counter = 0
-        self.source = 'Dev1/port0/line0'
+        self.source = self.gui.nidaq_checkbox.line_in
 
     def run(self):
         while self.alive:
             if nidaq.readDigitalLine(source = self.source):
                 # self.alive = False
-                print('reading input at %s, value is True' % self.source)
-                self.gui.nidaq_checkbox.setText('NI-DAQ 6008 connection established to %s' % self.source)
+                # print('reading input at %s, value is True' % self.source)
+                self.gui.nidaq_checkbox.setText('NI-DAQ 6008 connection established. Line in: %s. Line out: %s' % (self.source, self.gui.nidaq_checkbox.line_out) )
                 # If the previous reading is False and now is True then run a Kilroy protocol
                 if not self.port_reading:
                     print('chatting to Kilroy')
@@ -69,8 +69,8 @@ class TTL_Thread(QThread):
                     self.emit_counter = self.emit_counter + 1
             else:
                 self.port_reading = False
-                self.gui.nidaq_checkbox.setText('NI-DAQ 6008 connection established to %s' % self.source)
-                print('%s: reading input at %s, value is False' % (datetime.datetime.now(), self.source))
+                self.gui.nidaq_checkbox.setText('NI-DAQ 6008 connection established. Line in: %s. Line out: %s' % (self.source, self.gui.nidaq_checkbox.line_out) )
+                # print('%s: reading input at %s, value is False' % (datetime.datetime.now(), self.source))
 
         else:
             print('%s: NI-DAQ 6008 connection paused' % (datetime.datetime.now()))
