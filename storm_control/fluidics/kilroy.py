@@ -82,7 +82,7 @@ class Kilroy(QtWidgets.QMainWindow):
         self.kilroyProtocols.command_ready_signal.connect(self.sendCommand)
         self.kilroyProtocols.status_change_signal.connect(self.handleProtocolStatusChange)
         self.kilroyProtocols.completed_protocol_signal.connect(self.handleProtocolComplete)
-        self.kilroyProtocols.do_TTL_pulse_signal.connect(self.TTL_out)
+        self.kilroyProtocols.onGenerateTTL.connect(self.generateTTL)
 
         # Create Kilroy TCP Server and connect signals
         self.tcpServer = TCPServer(port = self.tcp_port,
@@ -129,7 +129,7 @@ class Kilroy(QtWidgets.QMainWindow):
             self.pumpControl.setEnabled(True)
 
 
-    def TTL_out(self):
+    def generateTTL(self):
         if self.kilroyProtocols.nidaq_checkbox.isChecked():
             # send now a TTL pulse out
             print('Sending a TTL pulse')

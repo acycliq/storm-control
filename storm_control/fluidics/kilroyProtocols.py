@@ -34,7 +34,7 @@ class KilroyProtocols(QtWidgets.QMainWindow):
     command_ready_signal = QtCore.pyqtSignal() # A command is ready to be issued
     status_change_signal = QtCore.pyqtSignal() # A protocol status change occured
     completed_protocol_signal = QtCore.pyqtSignal(object) # Name of completed protocol
-    do_TTL_pulse_signal = QtCore.pyqtSignal()
+    onGenerateTTL = QtCore.pyqtSignal()
         
     def __init__(self,
                  protocol_xml_path = "default_config.xml",
@@ -474,7 +474,7 @@ class KilroyProtocols(QtWidgets.QMainWindow):
         if self.status[0] >= 0:
             if self.verbose: print("Stopped Protocol")
             self.completed_protocol_signal.emit(self.received_message)
-            self.do_TTL_pulse_signal.emit()
+            self.onGenerateTTL.emit()
         
         # Reset status and emit status change signal
         self.status = [-1,-1]
@@ -556,13 +556,13 @@ class KilroyProtocols(QtWidgets.QMainWindow):
         if b.isChecked() == True:
             self.ttl_thread = nidaq.TTL_Thread(self)
             self.ttl_thread.start()
-            # Connect the "update_me" signal to the TTL_respond slot
-            self.ttl_thread.update_me.connect(self.TTL_respond)
+            # Connect the "onReceiveTTL" signal to the receiveTTL slot (callback)
+            self.ttl_thread.onReceiveTTL.connect(self.receiveTTL)
         else:
             self.ttl_thread.alive = False
             print('%s: button is deselected' % (datetime.datetime.now()))
 
-    def TTL_respond(self, pid):
+    def receiveTTL(self, pid):
         print('Kilroy: in TTL_respond')
         print('x is ' + str(pid))
         pid = pid % len(self.protocol_names)

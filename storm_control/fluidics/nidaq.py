@@ -42,7 +42,7 @@ class TTL_Pulse(QThread):
 
 class TTL_Thread(QThread):
     # Define a signal called 'update_me' that takes an argument of type int.
-    update_me = pyqtSignal(int)
+    onReceiveTTL = pyqtSignal(int)
 
     def __init__(self, obj):
         QThread.__init__(self)
@@ -63,8 +63,8 @@ class TTL_Thread(QThread):
                 if not self.port_reading:
                     print('chatting to Kilroy')
                     sleep(3)
-                    # emit an "update_me" signal passing-in the appropriate int parameter, emit_counter
-                    self.update_me.emit(self.emit_counter)
+                    # emit an "onReceiveTTL" signal passing-in the appropriate int parameter, emit_counter
+                    self.onReceiveTTL.emit(self.emit_counter)
                     self.port_reading = True
                     self.emit_counter = self.emit_counter + 1
             else:
