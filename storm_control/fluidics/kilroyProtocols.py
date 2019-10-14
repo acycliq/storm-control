@@ -564,7 +564,7 @@ class KilroyProtocols(QtWidgets.QMainWindow):
 
     def receiveTTL(self, pid):
         print('Kilroy: in TTL_respond')
-        print('x is ' + str(pid))
+        print('Num of TTLs received: ' + str(pid + 1))
         pid = pid % len(self.protocol_names)
         self.startProtocolLocally(pid=pid)
         return 1
