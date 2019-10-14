@@ -389,7 +389,7 @@ class KilroyProtocols(QtWidgets.QMainWindow):
 
         # if you pass-in the protocol ID then set the current row
         if protocol_ID is not False:
-            print('protocol_ID is False')
+            # print('protocol_ID is False')
             self.protocolListWidget.setCurrentRow(protocol_ID)
 
         protocol_ID = self.protocolListWidget.currentRow()
@@ -445,7 +445,7 @@ class KilroyProtocols(QtWidgets.QMainWindow):
         # Run protocol
         self.received_message = None # Remove existing messages
         print('')
-        print('starting protocol: ', str(pid))
+        # print('starting protocol: ', str(pid))
         self.startProtocol(protocol_ID=pid)
 
     # ------------------------------------------------------------------------------------
