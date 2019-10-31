@@ -5,7 +5,7 @@ import datetime
 
 
 class TTL_Thread(QThread):
-    # Define a signal called 'update_me' that takes an argument of type int.
+    # Define a signal called 'onReceiveTTL' that takes an argument of type int.
     onReceiveTTL = pyqtSignal(int)
 
     def __init__(self, obj):
