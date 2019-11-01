@@ -132,6 +132,7 @@ class Kilroy(QtWidgets.QMainWindow):
 
 
     def generateTTL(self, line_out):
+        ttl_duration = 1  # duration of the TTL pulse in secs
         if self.kilroyProtocols.nidaq_checkbox.isChecked():
             print('line out is:', line_out)
             # send now a TTL pulse out
@@ -148,7 +149,7 @@ class Kilroy(QtWidgets.QMainWindow):
             sleep(1)
             nicontrol.setDigitalLine(line_out, True)
             print('Done, sending a TTL out')
-            sleep(1)
+            sleep(ttl_duration)
             nicontrol.setDigitalLine(line_out, False)
         else:
             pass
